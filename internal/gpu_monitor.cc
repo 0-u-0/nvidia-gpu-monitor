@@ -20,11 +20,7 @@ void GPUMonitor::Init(Napi::Env env, Napi::Object exports){
 
     exports.Set("GPUMonitor", func);
 }
-  #ifdef GPU_ENABLED
-    
-  #else
 
-  #endif
 
 GPUMonitor::GPUMonitor(const Napi::CallbackInfo& info) : Napi::ObjectWrap<GPUMonitor>(info){
   #ifdef GPU_ENABLED
