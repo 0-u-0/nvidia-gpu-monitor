@@ -12,6 +12,7 @@ void GPUMonitor::Init(Napi::Env env, Napi::Object exports){
                           InstanceMethod("getDeviceCount", &GPUMonitor::getDeviceCount),
                           InstanceMethod("getMemoryUsed", &GPUMonitor::getMemoryUsed),
                           InstanceMethod("getGPUUsage", &GPUMonitor::getGPUUsage),
+                          InstanceMethod("close", &GPUMonitor::close),
                         });
 
     Napi::FunctionReference* constructor = new Napi::FunctionReference();
@@ -105,4 +106,15 @@ Napi::Value GPUMonitor::isSupported(const Napi::CallbackInfo& info){
 
 Napi::Value GPUMonitor::getDeviceCount(const Napi::CallbackInfo& info){
   return Napi::Number::New(info.Env(),deviceCount);
+}
+
+Napi::Value GPUMonitor::close(const Napi::CallbackInfo& info){
+  #ifdef GPU_ENABLED
+  nvmlReturn_t result = nvmlShutdown();
+  if (NVML_SUCCESS != result)
+  {
+      std::cout << "Failed to close: " << nvmlErrorString(result) << std::endl;
+  }
+  #endif
+  return info.Env().Undefined();
 }
