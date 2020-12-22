@@ -1,8 +1,12 @@
 {
-  "name": "nvidia-gpu-usage",
+  "name": "nvidia-gpu-monitor",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/0-u-0/nvidia-gpu-monitor.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "cmake-js compile"
