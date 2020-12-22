@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.12)
 
 set (CMAKE_CXX_STANDARD 14)
 
@@ -29,7 +29,7 @@ string(REPLACE "\n" "" NODE_ADDON_API_DIR ${NODE_ADDON_API_DIR})
 string(REPLACE "\"" "" NODE_ADDON_API_DIR ${NODE_ADDON_API_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${NODE_ADDON_API_DIR})
 
-#FOR IDE, IDE_INC=CMAKE_JS_INC
+#FOR IDE, IDE_INC=CMAKE_JS_INC : ./node_modules/.bin/cmake-js print-configure
 if(DEFINED ENV{IDE_INC})
     message(STATUS "IDE_INC = " $ENV{IDE_INC})
     target_include_directories(${PROJECT_NAME} PRIVATE $ENV{IDE_INC})
