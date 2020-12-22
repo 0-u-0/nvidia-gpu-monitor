@@ -7,12 +7,6 @@ include_directories(${CMAKE_JS_INC})
 
 find_package(CUDA)
 
-if(CUDA_FOUND)
-    message("CUDA FOUND")
-    add_compile_definitions(GPU_ENABLED)
-else()
-    message("NO CUDA")
-endif(CUDA_FOUND)
 
 file(GLOB SOURCE_FILES "internal/*.cc" "internal/*.h")
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${CMAKE_JS_SRC})
@@ -30,9 +24,16 @@ string(REPLACE "\"" "" NODE_ADDON_API_DIR ${NODE_ADDON_API_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${NODE_ADDON_API_DIR})
 
 
-# third party libraries
-find_library(NVIDIAML nvidia-ml)
-target_link_libraries(${PROJECT_NAME} ${NVIDIAML})
+if(CUDA_FOUND)
+    message("CUDA FOUND")
+    add_compile_definitions(GPU_ENABLED)
+
+    # third party libraries
+    find_library(NVIDIAML nvidia-ml)
+    target_link_libraries(${PROJECT_NAME} ${NVIDIAML})
+else()
+    message("NO CUDA")
+endif(CUDA_FOUND)
 
 #FOR IDE, IDE_INC=CMAKE_JS_INC : ./node_modules/.bin/cmake-js print-configure
 if(DEFINED ENV{IDE_INC})
