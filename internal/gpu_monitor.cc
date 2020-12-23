@@ -147,3 +147,30 @@ Napi::Value GPUMonitor::getDeviceName(const Napi::CallbackInfo& info){
   return env.Null();
 
 }
+
+Napi::Value GPUMonitor::getTemperature(const Napi::CallbackInfo& info){
+  auto env = info.Env();
+
+  #ifdef GPU_ENABLED
+
+  if(info.Length() < 0 || !info[0].IsNumber()){
+    return Napi::Number::New(env, 0);
+  }
+  uint32_t index = info[0].ToNumber().Uint32Value();
+
+  // std::cout << index << std::endl;
+  if (index >= 0 &&  index <= deviceCount - 1){
+
+    nvmlReturn_t result;
+    nvmlDevice_t device;
+    result = nvmlDeviceGetHandleByIndex(index, &device);
+    //TODO: check result
+    char name[NVML_DEVICE_NAME_BUFFER_SIZE];
+    result = nvmlDeviceGetName(device, name, NVML_DEVICE_NAME_BUFFER_SIZE);
+
+    return Napi::String::New(env, name);
+  }    
+  #endif
+
+  return env.Null();
+}
