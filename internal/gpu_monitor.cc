@@ -12,6 +12,7 @@ void GPUMonitor::Init(Napi::Env env, Napi::Object exports){
                           InstanceMethod("getDeviceCount", &GPUMonitor::getDeviceCount),
                           InstanceMethod("getMemoryUsed", &GPUMonitor::getMemoryUsed),
                           InstanceMethod("getGPUUsage", &GPUMonitor::getGPUUsage),
+                          InstanceMethod("getDeviceName", &GPUMonitor::getDeviceName),
                           InstanceMethod("close", &GPUMonitor::close),
                         });
 
@@ -143,6 +144,6 @@ Napi::Value GPUMonitor::getDeviceName(const Napi::CallbackInfo& info){
   }    
   #endif
 
-  return Napi::Number::New(env, 0);
+  return env.Null();
 
 }
