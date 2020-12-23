@@ -13,6 +13,7 @@ void GPUMonitor::Init(Napi::Env env, Napi::Object exports){
                           InstanceMethod("getMemoryUsed", &GPUMonitor::getMemoryUsed),
                           InstanceMethod("getGPUUsage", &GPUMonitor::getGPUUsage),
                           InstanceMethod("getDeviceName", &GPUMonitor::getDeviceName),
+                          InstanceMethod("getTemperature", &GPUMonitor::getTemperature),
                           InstanceMethod("close", &GPUMonitor::close),
                         });
 
@@ -165,12 +166,12 @@ Napi::Value GPUMonitor::getTemperature(const Napi::CallbackInfo& info){
     nvmlDevice_t device;
     result = nvmlDeviceGetHandleByIndex(index, &device);
     //TODO: check result
-    char name[NVML_DEVICE_NAME_BUFFER_SIZE];
-    result = nvmlDeviceGetName(device, name, NVML_DEVICE_NAME_BUFFER_SIZE);
+    uint32_t temperature;
+    nvmlDeviceGetTemperature(device,NVML_TEMPERATURE_GPU,&temperature);
 
-    return Napi::String::New(env, name);
+    return Napi::Number::New(env, temperature);
   }    
   #endif
 
-  return env.Null();
+  return  Napi::Number::New(env, 0);
 }

@@ -12,6 +12,7 @@ let ii = 0;
 const timer = setInterval(function(){
   console.log(gpu.getMemoryUsed(index));
   console.log(gpu.getGPUUsage(index));
+  console.log(gpu.getTemperature(index));//degrees C
   if(ii++ == 3){
     clearInterval(timer);
     gpu.close();
