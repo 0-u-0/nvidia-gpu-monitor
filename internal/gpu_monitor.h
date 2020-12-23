@@ -16,6 +16,7 @@ private:
   Napi::Value getDeviceCount(const Napi::CallbackInfo& info);
   Napi::Value getMemoryUsed(const Napi::CallbackInfo& info);
   Napi::Value getGPUUsage(const Napi::CallbackInfo& info);
+  Napi::Value getDeviceName(const Napi::CallbackInfo& info);
   Napi::Value close(const Napi::CallbackInfo& info);
 
 
