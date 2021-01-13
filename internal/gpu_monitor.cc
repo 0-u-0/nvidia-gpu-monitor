@@ -10,6 +10,7 @@ void GPUMonitor::Init(Napi::Env env, Napi::Object exports){
                         {
                           InstanceMethod("isSupported", &GPUMonitor::isSupported),
                           InstanceMethod("getDeviceCount", &GPUMonitor::getDeviceCount),
+                          InstanceMethod("getMemory", &GPUMonitor::getMemory),
                           InstanceMethod("getMemoryUsed", &GPUMonitor::getMemoryUsed),
                           InstanceMethod("getGPUUsage", &GPUMonitor::getGPUUsage),
                           InstanceMethod("getDeviceName", &GPUMonitor::getDeviceName),
@@ -98,6 +99,35 @@ Napi::Value GPUMonitor::getMemoryUsed(const Napi::CallbackInfo& info){
   return Napi::Number::New(env, 0);
   
 }
+
+Napi::Value GPUMonitor::getMemory(const Napi::CallbackInfo& info){
+  auto env = info.Env();
+
+  #ifdef GPU_ENABLED
+
+  if(info.Length() < 0 || !info[0].IsNumber()){
+    return Napi::Number::New(env, 0);
+  }
+  uint32_t index = info[0].ToNumber().Uint32Value();
+
+  // std::cout << index << std::endl;
+  if (index >= 0 &&  index <= deviceCount - 1){
+
+    nvmlReturn_t result;
+    nvmlDevice_t device;
+    result = nvmlDeviceGetHandleByIndex(index, &device);
+    //TODO: check result
+    nvmlMemory_t memory;
+    nvmlDeviceGetMemoryInfo(device, &memory);
+
+    return Napi::Number::New(env,memory.total);
+  }
+  #endif
+
+  return Napi::Number::New(env, 0);
+
+}
+
 Napi::Value GPUMonitor::isSupported(const Napi::CallbackInfo& info){
   #ifdef GPU_ENABLED
     return Napi::Boolean::New(info.Env(),true);

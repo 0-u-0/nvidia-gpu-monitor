@@ -15,6 +15,7 @@ private:
   Napi::Value isSupported(const Napi::CallbackInfo& info);
   Napi::Value getDeviceCount(const Napi::CallbackInfo& info);
   Napi::Value getMemoryUsed(const Napi::CallbackInfo& info);
+  Napi::Value getMemory(const Napi::CallbackInfo& info);
   Napi::Value getGPUUsage(const Napi::CallbackInfo& info);
   Napi::Value getDeviceName(const Napi::CallbackInfo& info);
   Napi::Value getTemperature(const Napi::CallbackInfo& info);
