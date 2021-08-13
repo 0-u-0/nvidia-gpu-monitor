@@ -6,6 +6,9 @@ project (gpu_monitor)
 include_directories(${CMAKE_JS_INC})
 
 find_package(CUDA)
+find_package(PkgConfig)
+
+pkg_check_modules(NVIDIAML REQUIRED IMPORTED_TARGET nvidia-ml-11.2)
 
 
 file(GLOB SOURCE_FILES "internal/*.cc" "internal/*.h")
@@ -26,11 +29,10 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${NODE_ADDON_API_DIR})
 
 if(CUDA_FOUND)
     message("CUDA FOUND")
-    add_compile_definitions(GPU_ENABLED)
-
+    target_compile_definitions(${PROJECT_NAME} PRIVATE GPU_ENABLED)
     # third party libraries
-    find_library(NVIDIAML nvidia-ml)
-    target_link_libraries(${PROJECT_NAME} ${NVIDIAML})
+   
+    target_link_libraries(${PROJECT_NAME} PkgConfig::NVIDIAML)
 else()
     message("NO CUDA")
 endif(CUDA_FOUND)
