@@ -8,7 +8,10 @@ include_directories(${CMAKE_JS_INC})
 find_package(CUDA)
 find_package(PkgConfig)
 
-pkg_check_modules(NVIDIAML REQUIRED IMPORTED_TARGET nvidia-ml-11.2)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+message(STATUS ${CUDA_VERSION})
+pkg_check_modules(NVIDIAML REQUIRED IMPORTED_TARGET nvidia-ml-${CUDA_VERSION})
 
 
 file(GLOB SOURCE_FILES "internal/*.cc" "internal/*.h")

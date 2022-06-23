@@ -19,6 +19,8 @@ private:
   Napi::Value getGPUUsage(const Napi::CallbackInfo& info);
   Napi::Value getDeviceName(const Napi::CallbackInfo& info);
   Napi::Value getTemperature(const Napi::CallbackInfo& info);
+  Napi::Value getEncoderUtilization(const Napi::CallbackInfo& info);
+  Napi::Value getDecoderUtilization(const Napi::CallbackInfo& info);
   Napi::Value close(const Napi::CallbackInfo& info);
 
 

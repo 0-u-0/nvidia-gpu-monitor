@@ -15,6 +15,8 @@ void GPUMonitor::Init(Napi::Env env, Napi::Object exports){
                           InstanceMethod("getGPUUsage", &GPUMonitor::getGPUUsage),
                           InstanceMethod("getDeviceName", &GPUMonitor::getDeviceName),
                           InstanceMethod("getTemperature", &GPUMonitor::getTemperature),
+                          InstanceMethod("getEncoderUtilization", &GPUMonitor::getEncoderUtilization),
+                          InstanceMethod("getDecoderUtilization", &GPUMonitor::getDecoderUtilization),
                           InstanceMethod("close", &GPUMonitor::close),
                         });
 
@@ -99,6 +101,73 @@ Napi::Value GPUMonitor::getMemoryUsed(const Napi::CallbackInfo& info){
   return Napi::Number::New(env, 0);
   
 }
+
+Napi::Value GPUMonitor::getEncoderUtilization(const Napi::CallbackInfo& info){
+  auto env = info.Env();
+
+  #ifdef GPU_ENABLED
+
+  if(info.Length() < 0 || !info[0].IsNumber()){
+    return Napi::Number::New(env, 0);
+  }
+  uint32_t index = info[0].ToNumber().Uint32Value();
+
+  // std::cout << index << std::endl;
+  if (index >= 0 &&  index <= deviceCount - 1){
+
+    nvmlReturn_t result;
+    nvmlDevice_t device;
+    result = nvmlDeviceGetHandleByIndex(index, &device);
+
+    uint utilization = 0;
+    uint samplingPeriodUs = 0;
+    //TODO(CC): check result
+    nvmlDeviceGetEncoderUtilization(device, &utilization, &samplingPeriodUs);
+
+    auto obj = Napi::Object::New(env);
+    obj.Set("utilization",utilization);
+    obj.Set("samplingPeriodUs",samplingPeriodUs);
+    return obj;
+  }    
+  #endif
+
+  return Napi::Number::New(env, 0);
+  
+}
+
+Napi::Value GPUMonitor::getDecoderUtilization(const Napi::CallbackInfo& info){
+  auto env = info.Env();
+
+  #ifdef GPU_ENABLED
+
+  if(info.Length() < 0 || !info[0].IsNumber()){
+    return Napi::Number::New(env, 0);
+  }
+  uint32_t index = info[0].ToNumber().Uint32Value();
+
+  // std::cout << index << std::endl;
+  if (index >= 0 &&  index <= deviceCount - 1){
+
+    nvmlReturn_t result;
+    nvmlDevice_t device;
+    result = nvmlDeviceGetHandleByIndex(index, &device);
+
+    uint utilization = 0;
+    uint samplingPeriodUs = 0;
+    //TODO(CC): check result
+    nvmlDeviceGetDecoderUtilization(device, &utilization, &samplingPeriodUs);
+
+    auto obj = Napi::Object::New(env);
+    obj.Set("utilization",utilization);
+    obj.Set("samplingPeriodUs",samplingPeriodUs);
+    return obj;
+  }    
+  #endif
+
+  return Napi::Number::New(env, 0);
+  
+}
+
 
 Napi::Value GPUMonitor::getMemory(const Napi::CallbackInfo& info){
   auto env = info.Env();
