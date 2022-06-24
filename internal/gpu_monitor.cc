@@ -124,10 +124,7 @@ Napi::Value GPUMonitor::getEncoderUtilization(const Napi::CallbackInfo& info){
     //TODO(CC): check result
     nvmlDeviceGetEncoderUtilization(device, &utilization, &samplingPeriodUs);
 
-    auto obj = Napi::Object::New(env);
-    obj.Set("utilization",utilization);
-    obj.Set("samplingPeriodUs",samplingPeriodUs);
-    return obj;
+    return  Napi::Number::New(env, utilization);
   }    
   #endif
 
@@ -156,11 +153,8 @@ Napi::Value GPUMonitor::getDecoderUtilization(const Napi::CallbackInfo& info){
     uint samplingPeriodUs = 0;
     //TODO(CC): check result
     nvmlDeviceGetDecoderUtilization(device, &utilization, &samplingPeriodUs);
-
-    auto obj = Napi::Object::New(env);
-    obj.Set("utilization",utilization);
-    obj.Set("samplingPeriodUs",samplingPeriodUs);
-    return obj;
+    
+    return  Napi::Number::New(env, utilization);
   }    
   #endif
 
